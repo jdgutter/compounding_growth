@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "128513833690",
+    "project_id": "compounding-growth",
+    "storage_bucket": "compounding-growth.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:128513833690:android:c57148d6a15777d7b383e3",
+        "android_client_info": {
+          "package_name": "com.example.compoundinggrowth"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC5V7trqPgdltbTwrQmV4r94bmppRpKvZ0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

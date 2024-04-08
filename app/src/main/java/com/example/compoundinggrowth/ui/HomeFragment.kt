@@ -1,6 +1,7 @@
 package com.example.compoundinggrowth.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -31,6 +32,20 @@ class HomeFragment : Fragment() {
 
         val textView: TextView = binding.textHome
         textView.text = "This is the Home fragment"
+        val symbol = "GOOG"
+
+        Log.d("requestQuote", "Request stock price of $symbol")
+        vm.getStockQuote(symbol)
+
+        vm.observeStockQuote().observe(viewLifecycleOwner) {
+
+            if (it?.globalQuote != null) {
+                binding.stockInfo.text =
+                    "Stock price of ${it.globalQuote.symbol} = ${it.globalQuote.price}"
+            } else {
+                binding.stockInfo.text = "response is null!"
+            }
+        }
 
         return root
     }

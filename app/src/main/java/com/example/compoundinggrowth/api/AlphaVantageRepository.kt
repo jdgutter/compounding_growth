@@ -10,27 +10,11 @@ class AlphaVantageRepository (private val alphaVantageApi: AlphaVantageApi) {
         return UUID.randomUUID().toString()
     }
 
-    suspend fun fetchStockPriceAndCreateTransaction(stockSymbol: String): Transaction? {
+
+    suspend fun fetchStockPrice(stockSymbol: String): AlphaVantageApi.GlobalQuoteResponse {
 
         // TODO: remove hard coded API key
-        val response = alphaVantageApi.getStockPrice(stockSymbol, "1L9E3XHTVAEK40MV")
-
-        return if (response.isSuccessful
-            && response.body() != null) {
-            val price = response.body()!!.globalQuote.price
-            Transaction(
-                id = generateUUID(),
-                name = "Stock purchase - $stockSymbol",
-                amount = price,
-                date = Date(),
-                category = "Investments",
-                stockSymbol = stockSymbol,
-                stockPriceAtTransaction = price
-            )
-        } else {
-            null
-        }
-
+        return alphaVantageApi.getStockPrice(symbol = stockSymbol, apiKey = "1L9E3XHTVAEK40MV")
     }
 
 }

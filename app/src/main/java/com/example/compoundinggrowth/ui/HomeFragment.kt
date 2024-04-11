@@ -35,7 +35,7 @@ class HomeFragment : Fragment() {
         val symbol = "GOOG"
 
         Log.d("requestQuote", "Request stock price of $symbol")
-        vm.getStockQuote(symbol)
+        //vm.getStockQuote(symbol)
 
         vm.observeStockQuote().observe(viewLifecycleOwner) {
 

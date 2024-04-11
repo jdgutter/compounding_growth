@@ -13,6 +13,9 @@ import com.example.compoundinggrowth.api.AlphaVantageRepository
 import com.example.compoundinggrowth.model.Transaction
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import com.example.compoundinggrowth.AuthUser
+import com.example.compoundinggrowth.User
+import com.example.compoundinggrowth.invalidUser
 
 
 class MainViewModel : ViewModel() {
@@ -20,6 +23,9 @@ class MainViewModel : ViewModel() {
     val alphaVantageApi = AlphaVantageApi.create()
     val repository = AlphaVantageRepository(alphaVantageApi)
     val stockQuote = MutableLiveData<AlphaVantageApi.GlobalQuoteResponse>()
+
+    // Track current authenticated user
+    private var currentAuthUser = invalidUser
 
     fun getStockQuote(symbolName : String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -29,6 +35,10 @@ class MainViewModel : ViewModel() {
 
     fun observeStockQuote(): LiveData<AlphaVantageApi.GlobalQuoteResponse> {
         return stockQuote
+    }
+
+    fun setCurrentAuthUser(user: User) {
+        currentAuthUser = user
     }
 
     //fun getStockTransaction(symbolName : String) : Transaction? {

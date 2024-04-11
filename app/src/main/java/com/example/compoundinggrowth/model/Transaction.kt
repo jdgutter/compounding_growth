@@ -9,7 +9,7 @@ import java.util.Date
 data class Transaction (    // Auth information
     var ownerName: String = "",
     var ownerUid: String = "",
-    var id : String = "", // Unique identifier for transction
+    var uuid : String = "", // Unique identifier for transaction
     var name : String = "", // Transaction name
     var amount: Double = 0.0, // Transaction Amount
     var date: Date = Date(), // Transaction Date

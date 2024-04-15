@@ -1,6 +1,7 @@
 package com.example.compoundinggrowth.ui
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -8,8 +9,14 @@ import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.compoundinggrowth.databinding.FragmentTransactionsBinding
 import com.example.compoundinggrowth.ui.MainViewModel
+import java.util.Date
+import kotlin.random.Random
 
 class TransactionsFragment : Fragment() {
 
@@ -29,10 +36,63 @@ class TransactionsFragment : Fragment() {
         _binding = FragmentTransactionsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        val textView: TextView = binding.textTransactions
-        textView.text = "This is the transactions fragment"
+        initAdapter(binding.txnRV)
+
+        // Setup createTxnButton
+        binding.createTxnButton.setOnClickListener {
+            //createRandomTransactions()
+        }
+
+        vm.fetchTransactions {
+
+        }
 
         return root
+    }
+
+    // Set up the adapter and recycler view
+    private fun initAdapter(rv: RecyclerView) {
+        val adapter = TransactionAdapter(vm) {
+            Log.d("OneTransaction",
+                String.format("OneTransaction name %s",
+                    it.name))
+
+            val action = TransactionsFragmentDirections.actionTransactionsFragmentToOneTransaction(it)
+            findNavController().navigate(action)
+
+        }
+
+        vm.transactionList.observe(viewLifecycleOwner) {
+            adapter.submitList(it.toMutableList())
+        }
+
+        val itemDecor = DividerItemDecoration(rv.context, LinearLayoutManager.VERTICAL)
+        rv.addItemDecoration(itemDecor)
+        rv.adapter = adapter
+        rv.layoutManager = LinearLayoutManager(rv.context)
+
+    }
+
+    fun createRandomTransactions() {
+
+        Log.d("createRandomTransactions", "creating dummy transactions")
+
+        for (i in 0 until 10) {
+
+            val name = "dummy_transaction${i}"
+            val amount = Random.nextDouble() * 10
+            val date = Date()
+            val category = "shopping"
+
+            vm.createTransaction(
+                name,
+                amount,
+                date,
+                category,
+                null,
+                null
+            )
+        }
     }
 
     override fun onDestroyView() {

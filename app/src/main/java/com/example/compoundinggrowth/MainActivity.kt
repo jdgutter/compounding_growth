@@ -20,6 +20,7 @@ import com.example.compoundinggrowth.AuthUser
 
 class MainActivity : AppCompatActivity() {
 
+    private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var binding: ActivityMainBinding
     private lateinit var navController: NavController
     private lateinit var authUser : AuthUser
@@ -66,5 +67,11 @@ class MainActivity : AppCompatActivity() {
             // XXX Write me, user status has changed
             viewModel.setCurrentAuthUser(it)
         }
+    }
+
+    override fun onSupportNavigateUp(): Boolean {
+        val navController = findNavController(R.id.nav_host_fragment_activity_main)
+        return navController.navigateUp()
+                || super.onSupportNavigateUp()
     }
 }

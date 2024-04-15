@@ -21,12 +21,28 @@
         android:id="@+id/navigation_transactions"
         android:name="com.example.compoundinggrowth.ui.TransactionsFragment"
         android:label="@string/title_transactions"
-        tools:layout="@layout/fragment_transactions" />
+        tools:layout="@layout/fragment_transactions">
+
+        <action
+            android:id="@+id/action_transactionsFragment_to_oneTransaction"
+            app:destination="@id/one_transaction" />
+
+    </fragment>
+
 
     <fragment
         android:id="@+id/navigation_budgets"
         android:name="com.example.compoundinggrowth.ui.BudgetsFragment"
         android:label="@string/title_budgets"
         tools:layout="@layout/fragment_budgets" />
+
+    <fragment
+        android:id="@+id/one_transaction"
+        android:name="com.example.compoundinggrowth.ui.OneTransactionFragment"
+        android:label="OneTransactionFragment">
+        <argument
+            android:name="Transaction"
+            app:argType="com.example.compoundinggrowth.model.Transaction" />
+    </fragment>
 
 </navigation>

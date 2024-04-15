@@ -30,7 +30,7 @@ class ViewModelDBHelper {
     /////////////////////////////////////////////////////////////
     // Interact with Firestore db
     // https://firebase.google.com/docs/firestore/query-data/order-limit-data
-    fun fetchPhotoMeta(
+    fun fetchTransaction(
         resultListener: (List<Transaction>) -> Unit
     ) {
 

@@ -29,8 +29,6 @@ class BudgetsFragment : Fragment() {
         _binding = FragmentBudgetsBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
-        binding.textBudgets.text = "this is the budgets fragment"
-
         return root
     }
 

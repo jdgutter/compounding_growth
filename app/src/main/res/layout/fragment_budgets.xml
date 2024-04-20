@@ -1,29 +1,68 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:layout_margin="8dp"
+    android:orientation="vertical"
     tools:context=".ui.TransactionsFragment">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Cash Flow"
+        android:textAlignment="center"
+        android:textSize="20sp" />
+
+    <com.github.mikephil.charting.charts.HorizontalBarChart
+        android:id="@+id/cashFlowChart"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_margin="8dp"
+        >
 
-        <com.github.mikephil.charting.charts.HorizontalBarChart
-            android:id="@+id/cashFlowChart"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:layout_weight="1"
-            />
+            android:textSize="18sp"
+            android:gravity="end"
+            android:textStyle="bold"
+            android:text="Name" />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/budgetRV"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="2"/>
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:textStyle="bold"
+            android:text="Budgeted" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textSize="18sp"
+            android:gravity="end"
+            android:textStyle="bold"
+            android:text="Remaining" />
 
     </LinearLayout>
 
-</androidx.constraintlayout.widget.ConstraintLayout>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/budgetRV"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="2"/>
+
+</LinearLayout>

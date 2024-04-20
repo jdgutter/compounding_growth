@@ -1,11 +1,15 @@
 package com.example.compoundinggrowth.ui
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.InputMethodManager
+import android.widget.EditText
 import android.widget.TextView
+import androidx.core.widget.addTextChangedListener
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
@@ -13,6 +17,7 @@ import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.example.compoundinggrowth.R
 import com.example.compoundinggrowth.databinding.FragmentTransactionsBinding
 import com.example.compoundinggrowth.ui.MainViewModel
 import java.util.Date
@@ -37,10 +42,11 @@ class TransactionsFragment : Fragment() {
         val root: View = binding.root
 
         initAdapter(binding.txnRV)
+        initSearchBar(binding.searchTV)
 
         // Setup createTxnButton
         binding.createTxnButton.setOnClickListener {
-            //createRandomTransactions()
+            findNavController().navigate(R.id.create_transaction)
         }
 
         vm.fetchTransactions {
@@ -62,7 +68,7 @@ class TransactionsFragment : Fragment() {
 
         }
 
-        vm.transactionList.observe(viewLifecycleOwner) {
+        vm.searchTransactions.observe(viewLifecycleOwner) {
             adapter.submitList(it.toMutableList())
         }
 
@@ -73,25 +79,24 @@ class TransactionsFragment : Fragment() {
 
     }
 
-    fun createRandomTransactions() {
+    private fun initSearchBar(editTV : EditText) {
 
-        Log.d("createRandomTransactions", "creating dummy transactions")
+        editTV.addTextChangedListener { editable ->
 
-        for (i in 0 until 10) {
+            if (editable != null
+                && editable.isEmpty()) {
+                hideKeyboard()
+            }
 
-            val name = "dummy_transaction${i}"
-            val amount = Random.nextDouble() * 10
-            val date = Date()
-            val category = "shopping"
+            vm.setSearchTerm(editable.toString())
+        }
+    }
 
-            vm.createTransaction(
-                name,
-                amount,
-                date,
-                category,
-                null,
-                null
-            )
+    private fun hideKeyboard() {
+        val view = activity?.currentFocus
+        view?.let {
+            val imm = activity?.getSystemService(Context.INPUT_METHOD_SERVICE) as? InputMethodManager
+            imm?.hideSoftInputFromWindow(it.windowToken, 0)
         }
     }
 

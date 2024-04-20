@@ -64,7 +64,9 @@ class MainActivity : AppCompatActivity() {
         lifecycle.addObserver(authUser)
 
         authUser.observeUser().observe(this) {
-            // XXX Write me, user status has changed
+
+            Log.d(TAG, "CurrentAuthUser set to ${it.email}")
+
             viewModel.setCurrentAuthUser(it)
         }
     }

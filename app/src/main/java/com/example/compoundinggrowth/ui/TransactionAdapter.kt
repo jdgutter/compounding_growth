@@ -43,7 +43,14 @@ class TransactionAdapter (private val viewModel: MainViewModel,
         val txn = list[position]
 
         binding.rowName.text = txn.name
-        binding.rowAmount.text = txn.amount.toString()
+
+        val value = if (txn.stockSymbol != null) {
+            txn.amount * txn.stockPriceAtTransaction!!
+        } else {
+            txn.amount
+        }
+        
+        binding.rowAmount.text = String.format("$%.2f", value)
 
     }
 

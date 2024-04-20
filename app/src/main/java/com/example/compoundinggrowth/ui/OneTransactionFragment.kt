@@ -46,17 +46,39 @@ class OneTransactionFragment: Fragment() {
 
         transaction = args.Transaction
 
-        binding.txnAmount.text = transaction.amount.toString()
+        // Setup visible/invisible views based on isStockTransaction()
+        if (transaction.isStockTransaction()) {
+            binding.currentStockPrice.visibility = View.VISIBLE
+            binding.categorySpinner.visibility = View.GONE
+            vm.getStockQuote(transaction.stockSymbol!!)
+        } else {
+            binding.currentStockPrice.visibility = View.GONE
+            binding.categorySpinner.visibility = View.VISIBLE
+        }
+
+        // Get value based on isStockTransaction()
+        val value = if (transaction.isStockTransaction()) {
+            transaction.amount * transaction.stockPriceAtTransaction!!
+        } else {
+            transaction.amount
+        }
+
+        // Set transaction info into view
+        binding.txnAmount.text = String.format("$%.2f", value)
         binding.txnDate.text = transaction.date.toString()
         binding.txnName.text = transaction.name
-        binding.txnAccount.text = transaction.account
-        binding.txnAccount.text = transaction.account
+        binding.owner.text = "Owner: ${transaction.ownerName}"
+
+        vm.stockQuote.observe(viewLifecycleOwner) {
+            val price = it.globalQuote.price.toDouble()
+            binding.currentStockPrice.text = String.format("$%.2f", price)
+        }
 
         // Setup spinner
         binding.categorySpinner.adapter = createAdapterFromResource(R.array.categories)
-
         val categoryIdx = categories.indexOf(transaction.category)
 
+        // Set spinner initial position
         if (categoryIdx != -1) {
             binding.categorySpinner.setSelection(categoryIdx)
         } else {
@@ -65,8 +87,15 @@ class OneTransactionFragment: Fragment() {
 
         setupSpinnerListener(binding.categorySpinner)
 
+        // Setup Delete Button
         binding.deleteBut.setOnClickListener {
-            vm.removeTransaction(transaction)
+
+            if (transaction.ownerUid == vm.getCurrentAuthUser().uid) {
+                vm.removeTransaction(transaction)
+            } else {
+                vm.removeViewer(transaction)
+            }
+
             findNavController().popBackStack()
         }
 
@@ -86,11 +115,9 @@ class OneTransactionFragment: Fragment() {
         spinner.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
 
             override fun onItemSelected(parent: AdapterView<*>, view: View?, position: Int, id: Long) {
-
-                if (position != 0) {
-                    val category = parent.getItemAtPosition(position).toString()
-                    transaction.category = category
-                }
+                val category = parent.getItemAtPosition(position).toString()
+                transaction.category = category
+                vm.updateTransaction(transaction)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>) {

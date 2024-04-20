@@ -15,7 +15,12 @@
         android:id="@+id/navigation_accounts"
         android:name="com.example.compoundinggrowth.ui.AccountsFragment"
         android:label="@string/title_accounts"
-        tools:layout="@layout/fragment_accounts" />
+        tools:layout="@layout/fragment_accounts" >
+
+        <action
+            android:id="@+id/action_AccountsFragment_to_oneTransaction"
+            app:destination="@id/one_transaction" />
+    </fragment>
 
     <fragment
         android:id="@+id/navigation_transactions"
@@ -27,14 +32,28 @@
             android:id="@+id/action_transactionsFragment_to_oneTransaction"
             app:destination="@id/one_transaction" />
 
+        <action
+            android:id="@+id/action_transactionsFragment_to_createTransaction"
+            app:destination="@id/create_transaction" />
+
     </fragment>
 
+    <fragment
+        android:id="@+id/create_transaction"
+        android:name="com.example.compoundinggrowth.ui.CreateTransactionFragment"
+        android:label="Create Transaction"
+        tools:layout="@layout/create_transaction" />
 
     <fragment
         android:id="@+id/navigation_budgets"
         android:name="com.example.compoundinggrowth.ui.BudgetsFragment"
         android:label="@string/title_budgets"
-        tools:layout="@layout/fragment_budgets" />
+        tools:layout="@layout/fragment_budgets" >
+
+        <action
+            android:id="@+id/action_budgetsFragment_to_oneBudget"
+            app:destination="@id/one_budget" />
+    </fragment>
 
     <fragment
         android:id="@+id/one_transaction"
@@ -43,6 +62,15 @@
         <argument
             android:name="Transaction"
             app:argType="com.example.compoundinggrowth.model.Transaction" />
+    </fragment>
+
+    <fragment
+        android:id="@+id/one_budget"
+        android:name="com.example.compoundinggrowth.ui.OneBudgetFragment"
+        android:label="OneBudgetFragment">
+        <argument
+            android:name="Budget"
+            app:argType="com.example.compoundinggrowth.model.Budget" />
     </fragment>
 
 </navigation>

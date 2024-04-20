@@ -6,15 +6,15 @@ import com.google.firebase.firestore.ServerTimestamp
 import java.io.Serializable
 import java.util.Date
 
-data class Transaction (    // Auth information
+data class Transaction (
     var ownerName: String = "",
     var ownerUid: String = "",
     var uuid : String = "", // Unique identifier for transaction
     var name : String = "", // Transaction name
-    var amount: Double = 0.0, // Transaction Amount
+    var amount: Double = 0.0, // Amount of Shares
     var date: Date = Date(), // Transaction Date
-    var account: String = "", // Account
     var category: String? = null, // Budget category
+    var viewer: String = "", // One other viewer that can view this transaction
     var stockSymbol: String? = null, // For investment tracking
     var stockPriceAtTransaction: Double? = null, // For investment tracking
     // Written on the server
@@ -31,8 +31,8 @@ data class Transaction (    // Auth information
         }
 
         val incomeCategories = setOf(
-            "income",
             "paycheck",
+            "dividend"
         )
 
         val expenseCategories = setOf(
@@ -48,6 +48,10 @@ data class Transaction (    // Auth information
     // Given a search string, look for it in the Transaction
     fun searchFor(searchTerm: String): Boolean {
         return find(name, searchTerm)
+    }
+
+    fun isStockTransaction(): Boolean {
+        return stockSymbol != null
     }
 
     override fun equals(other: Any?) : Boolean =

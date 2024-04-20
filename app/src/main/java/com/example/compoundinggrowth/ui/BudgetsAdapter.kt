@@ -7,15 +7,23 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.compoundinggrowth.databinding.BudgetRowBinding
 import com.example.compoundinggrowth.model.Budget
-import com.example.compoundinggrowth.model.Transaction
 
-class BudgetsAdapter (private val viewModel: MainViewModel)
+class BudgetsAdapter (private val viewModel: MainViewModel,
+                      private val navigateToOneBudget: (Budget)->Unit)
     : ListAdapter<Budget, BudgetsAdapter.VH>(Diff()) {
 
 
     // ViewHolder pattern holds row binding
     inner class VH(val rowBinding : BudgetRowBinding)
         : RecyclerView.ViewHolder(rowBinding.root) {
+        init {
+
+            // Set on click listener for rowBinding
+            rowBinding.root.setOnClickListener {
+                navigateToOneBudget(getItem(bindingAdapterPosition))
+            }
+
+        }
 
     }
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): VH {
@@ -35,8 +43,22 @@ class BudgetsAdapter (private val viewModel: MainViewModel)
         val budgetItem = list[position]
 
         binding.rowName.text = budgetItem.category
-        binding.rowBudget.text = budgetItem.budgeted.toString()
-        binding.rowRemaining.text = budgetItem.remaining.toString()
+        binding.rowBudget.text = String.format("$%.2f", budgetItem.budgeted)
+
+        val txnList = viewModel.transactionList.value!!.toList()
+
+        var totalUsed : Double = 0.0
+
+        for (item in txnList) {
+            if (item.category == budgetItem.category
+                && !item.isStockTransaction()) {
+                totalUsed += item.amount
+            }
+        }
+
+        budgetItem.remaining = budgetItem.budgeted - totalUsed
+
+        binding.rowRemaining.text =  String.format("$%.2f", budgetItem.remaining)
 
     }
 

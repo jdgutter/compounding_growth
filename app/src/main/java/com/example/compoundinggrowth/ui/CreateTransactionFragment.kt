@@ -78,22 +78,25 @@ class CreateTransactionFragment : Fragment() {
 
         binding.okButton.setOnClickListener {
 
-            if (isFieldsAreValid()) {
+            if (areFieldsValid()) {
 
                 amount = binding.txnAmount.text.toString().toDouble()
-
                 viewer = binding.viewerEmail.text.toString()
 
                 if (binding.accountInvestmentToggle.isChecked) {
                     name = binding.txnName.text.toString().uppercase()
                     stockSymbol =  vm.stockQuote.value!!.globalQuote.symbol
                     stockPriceAtTransaction = vm.stockQuote.value!!.globalQuote.price.toDouble()
+                    category = ""
                 } else {
                     name = binding.txnName.text.toString()
+                    stockSymbol = null
+                    stockPriceAtTransaction = null
                     category = categories[binding.categorySpinner.selectedItemPosition]
                 }
 
                 vm.createTransaction(name, amount, date, category, viewer, stockSymbol, stockPriceAtTransaction)
+
                 findNavController().popBackStack()
             } else {
                 Snackbar.make(it, "Please double check all fields have been set", Snackbar.LENGTH_LONG).show()
@@ -114,19 +117,19 @@ class CreateTransactionFragment : Fragment() {
 
     }
 
-    private fun isFieldsAreValid() : Boolean {
+    private fun areFieldsValid() : Boolean {
 
-        if (binding.accountInvestmentToggle.isChecked) {
+        return if (binding.accountInvestmentToggle.isChecked) {
 
             val symbol = binding.txnName.text.toString()
 
-            return (binding.txnAmount.text.toString().toDoubleOrNull() != null
+            (binding.txnAmount.text.toString().toDoubleOrNull() != null
                     && binding.txnDate.text.isNotEmpty()
                     && vm.stockQuote.value != null
                     && vm.stockQuote.value!!.globalQuote.symbol.equals(symbol, ignoreCase = true))
 
         } else {
-            return (binding.txnName.text.isNotEmpty()
+            (binding.txnName.text.isNotEmpty()
                     && binding.txnAmount.text.toString().toDoubleOrNull() != null
                     && binding.txnDate.text.isNotEmpty())
         }
@@ -136,9 +139,13 @@ class CreateTransactionFragment : Fragment() {
         binding.categorySpinner.visibility = View.GONE
         binding.txnName.hint = "Stock Symbol"
 
-        binding.txnName.addTextChangedListener {
-            Log.d("requestQuote", "Request stock price of ${it.toString()}")
-            vm.getStockQuote(it.toString())
+        binding.txnName.setOnFocusChangeListener { view, hasFocus ->
+
+            if (!hasFocus) {
+                Log.d("requestQuote", "Request stock price of ${binding.txnName.text.toString()}")
+                vm.getStockQuote(binding.txnName.text.toString())
+            }
+
         }
 
     }

@@ -44,6 +44,19 @@ class OneBudgetFragment: Fragment() {
 
         budget = args.Budget
 
+        val txnList = vm.transactionList.value!!.toList()
+
+        var totalUsed : Double = 0.0
+
+        for (item in txnList) {
+            if (item.category == budget.category
+                && !item.isStockTransaction()) {
+                totalUsed += item.amount
+            }
+        }
+
+        budget.remaining = budget.budgeted - totalUsed
+
         binding.budgetCategory.text = budget.category
         binding.budgetRemaining.text = String.format("Remaining budget: $%.2f", budget.remaining)
         binding.currentBudgetedAmount.setText(budget.budgeted.toString())

@@ -7,16 +7,12 @@ import java.util.UUID
 class AlphaVantageRepository (private val alphaVantageApi: AlphaVantageApi) {
 
     suspend fun fetchStockPrice(stockSymbol: String): AlphaVantageApi.GlobalQuoteResponse {
-
-        // TODO: remove hard coded API key
-        return alphaVantageApi.getStockPrice(symbol = stockSymbol, apiKey = "1L9E3XHTVAEK40MV")
+        return alphaVantageApi.getStockPrice(symbol = stockSymbol, apiKey = "AQ6ES11K2AUUB2M5")
     }
 
     suspend fun fetchMultipleDailyStockPrices(stockSymbol: List<String>): List<AlphaVantageApi.DailyQuoteResponse> {
-
-        // TODO: remove hard coded API key
         return stockSymbol.map { symbol ->
-            alphaVantageApi.getDailyStockPrices(symbol = symbol, apiKey = "1L9E3XHTVAEK40MV")
+            alphaVantageApi.getDailyStockPrices(symbol = symbol, apiKey = "AQ6ES11K2AUUB2M5")
         }
     }
 }

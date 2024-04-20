@@ -100,8 +100,10 @@ class AuthUser(private val registry: ActivityResultRegistry) :
     private fun login() {
         if (user() == null
             && !pendingLogin) {
-            Log.d(TAG, "XXX user null")
+
+            Log.d(TAG, "user null")
             pendingLogin = true
+
             // Choose authentication providers
             val providers = arrayListOf(
                 AuthUI.IdpConfig.EmailBuilder().build()

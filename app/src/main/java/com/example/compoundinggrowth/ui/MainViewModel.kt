@@ -150,10 +150,9 @@ class MainViewModel : ViewModel() {
     }
 
     fun createBudget(category: String) {
-        val currentUser = currentAuthUser
         val budget = Budget(
-            ownerName = currentUser.name,
-            ownerUid = currentUser.uid,
+            ownerName = currentAuthUser.email,
+            ownerUid = currentAuthUser.uid,
             uuid = generateUUID(),
             category = category,
             budgeted = 0.0,

@@ -51,13 +51,13 @@ class HomeFragment : Fragment() {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         val root: View = binding.root
 
+        vm.fetchTransactions {
+
+        }
+
         vm.transactionList.observe(viewLifecycleOwner) {
             setupNWChart(it)
             setupCashflowChart(it)
-        }
-
-        vm.fetchTransactions {
-
         }
 
         return root

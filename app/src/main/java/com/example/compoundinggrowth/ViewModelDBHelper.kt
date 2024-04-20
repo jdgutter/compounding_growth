@@ -12,8 +12,6 @@ class ViewModelDBHelper {
     private val rootTxnCollection = "allTransaction"
     private val rootBudgetCollection = "allBudget"
 
-    // If we want to listen for real time updates use this
-    // .addSnapshotListener { querySnapshot, firebaseFirestoreException ->
     private fun limitAndGetTransactions(
         user: User,
         query: Query,
@@ -57,9 +55,7 @@ class ViewModelDBHelper {
                 resultListener(listOf())
             }
     }
-    /////////////////////////////////////////////////////////////
-    // Interact with Firestore db
-    // https://firebase.google.com/docs/firestore/query-data/order-limit-data
+
     fun fetchTransaction(
         user : User,
         resultListener: (List<Transaction>) -> Unit
@@ -72,7 +68,6 @@ class ViewModelDBHelper {
             resultListener)
     }
 
-    // https://firebase.google.com/docs/firestore/manage-data/add-data#add_a_document
     fun createTransaction(
         user : User,
         transaction: Transaction,
@@ -94,7 +89,6 @@ class ViewModelDBHelper {
             resultListener)
     }
 
-    // https://firebase.google.com/docs/firestore/manage-data/delete-data#delete_documents
     fun removeTransaction(
         user: User,
         transaction: Transaction,
@@ -108,7 +102,7 @@ class ViewModelDBHelper {
             .addOnFailureListener { e -> Log.w("removeTransaction", "Error deleting document", e) }
 
         val orderBy = "date"
-        val ascending = Query.Direction.ASCENDING // else Query.Direction.DESCENDING
+        val ascending = Query.Direction.ASCENDING
 
         limitAndGetTransactions(user,
             transactionRef.orderBy(orderBy, ascending),
@@ -168,7 +162,8 @@ class ViewModelDBHelper {
         val budgetRef = db.collection(rootBudgetCollection)
 
         budgetRef.document(budget.uuid)
-            .update("budgeted", budget.budgeted)
+            .update("budgeted", budget.budgeted,
+                "remaining", budget.remaining)
             .addOnSuccessListener { Log.d("updateBudget", "Budget successfully updated!") }
             .addOnFailureListener { e -> Log.w("updateBudget", "Error updating document", e) }
 

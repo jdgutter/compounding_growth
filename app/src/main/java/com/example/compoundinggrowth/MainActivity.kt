@@ -38,6 +38,7 @@ class MainActivity : AppCompatActivity() {
         val navView: BottomNavigationView = binding.navView
 
         val navController = findNavController(R.id.nav_host_fragment_activity_main)
+
         // Passing each menu ID as a set of Ids because each
         // menu should be considered as top level destinations.
         val appBarConfiguration = AppBarConfiguration(
@@ -57,10 +58,7 @@ class MainActivity : AppCompatActivity() {
         super.onStart()
         Log.d(TAG, "onStart")
 
-        // Create authentication object.  This will log the user in if needed
         authUser = AuthUser(activityResultRegistry)
-
-        // authUser needs to observe our lifecycle so it can run login activity
         lifecycle.addObserver(authUser)
 
         authUser.observeUser().observe(this) {

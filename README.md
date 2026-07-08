@@ -1,12 +1,55 @@
-# android_fp
-Spring 2024 Android Programming Final Project
+# Compounding Growth
 
-## Cloc Report:
-```
-----------------------------------------------------------------------------------------------------------------------------------
-SUM:                                                                                             513             58           2199
-----------------------------------------------------------------------------------------------------------------------------------
+Compounding Growth is a native Android personal finance tracking application built to empower users to seamlessly monitor their aggregate net worth, monthly cash flow, and localized budget limits in real time. 
 
+By unifying secure cloud databases with live equity market data pipelines, the application delivers a highly interactive dashboard featuring sophisticated data visualization and secure cross-user transaction sharing.
+
+---
+
+## 🚀 Key Mobile Engineering Focuses
+
+This project was developed with a strong emphasis on modern Android engineering paradigms, robust architectural design, and production-ready performance considerations:
+
+* **Architecture & Pattern Enforcement:** Built entirely using the **MVVM (Model-View-ViewModel)** architectural pattern. Business logic and database states are lifecycle-decoupled via `ViewModel` implementations, utilizing `MediatorLiveData` and `MutableLiveData` to handle reactive UI updates efficiently.
+* **State & Data Synchronization:** Implemented real-time reactive asynchronous observers using Android Lifecycle libraries. The app securely abstracts user identity schemas away from backend dependencies, ensuring that if underlying authentication providers change, client-facing views remain stable.
+* **Robust Input Validation & User Experience:** Integrated localized data validation mechanisms—such as strict XML view bounds styling, system-managed native `DatePickerDialog` elements, and dedicated numeric input restriction configurations—to eliminate multi-tier input sanitization overhead.
+
+---
+
+## 🛠️ Tech Stack & Architecture
+
+### Core Engineering
+* **Language:** Native Kotlin 
+* **Minimum SDK Supported:** API 34 (Android 14)
+* **UI Framework:** XML Layouts with View Binding configuration
+* **Navigation:** Android Jetpack Navigation Components implementing type-safe argument passing (`SafeArgs`) across an optimized single-activity navigation graph.
+
+### Third-Party Architectures & Libraries
+* **Database & Auth Core (Firebase Environment):**
+    * **Firebase Auth & FirebaseUI:** Handles seamless, lifecycle-aware multi-step authentication processes.
+    * **Cloud Firestore:** Manages schema collections for transactions and budgeting, leveraging composite query filtering logic based on access permissions.
+* **Network Infrastructure (Retrofit2 & OkHttp3):** Architected standard `HttpUrl` network interfaces paired with specialized `HttpLoggingInterceptor` layers to implement robust HTTP query parsing.
+* **Advanced Data Visualization (MPAndroidChart):** Powered real-time line charts tracking multi-asset net worth and investment performance over time, alongside customized horizontal bar charts managing immediate budget overhead tracking.
+
+---
+
+## 📊 Deep-Dive Technical Implementation Highlights
+
+### 1. Asynchronous API Mapping (Alpha Vantage)
+To provide real-time investment calculations without crashing under stringent rate limits, the repository abstracts asset pricing via an automated asynchronous mapping layer. 
+* **The Challenge:** Explicit JSON parsing configurations mismatching field variables natively.
+* **The Resolution:** Applied targeted `@SerializedName` metadata interceptors allowing clean Retrofit object deserialization. Implemented a dynamic `FocusChange` listener configuration on text inputs rather than naive `TextWatcher` hooks, optimizing outbound endpoint calls and entirely avoiding redundant billing or daily API limit utilization.
+
+### 2. Multi-User Shared Access Architecture
+Transactions natively feature shared permissions tracking. Firestore instances utilize query filtration that filters matching elements where a user is either marked as the definitive `ownerUid` or registered as an authorized third-party `viewer`. This structure allows a secondary client to view shared metrics affecting joint expenses, while maintaining the flexibility to seamlessly drop active viewership without modifying the underlying primary ledger record.
+
+### 3. Native Canvas Layout Optimization
+To resolve dynamic canvas clipping bugs standard to floating-point calculations within complex data grids, the rendering loop utilizes programmatic view paddings (`setExtraOffsets`). This accurately scales and isolates line and bar graphs within strict XML constraints, avoiding metric overflow errors even during dramatic income-to-expense imbalances.
+
+---
+
+## 📈 System Composition (cloc report)
+```text
 -------------------------------------------------------------------------------
 Language                     files          blank        comment           code
 -------------------------------------------------------------------------------
@@ -15,51 +58,3 @@ XML                             13            102              0            593
 -------------------------------------------------------------------------------
 SUM:                            30            513             58           2199
 -------------------------------------------------------------------------------
-
-github.com/AlDanial/cloc v 2.00  T=0.02 s (1595.0 files/s, 147271.2 lines/s)
-----------------------------------------------------------------------------------------------------------------------------------
-File                                                                                           blank        comment           code
-----------------------------------------------------------------------------------------------------------------------------------
-app/src/main/java/com/example/compoundinggrowth/ui/AccountsFragment.kt                            51              5            178
-app/src/main/java/com/example/compoundinggrowth/ui/HomeFragment.kt                                44              4            154
-app/src/main/java/com/example/compoundinggrowth/ViewModelDBHelper.kt                              26              0            148
-app/src/main/java/com/example/compoundinggrowth/ui/CreateTransactionFragment.kt                   40              3            146
-app/src/main/java/com/example/compoundinggrowth/ui/MainViewModel.kt                               26              1            140
-app/src/main/java/com/example/compoundinggrowth/ui/BudgetsFragment.kt                             40              5            130
-app/src/main/java/com/example/compoundinggrowth/api/AlphaVantageApi.kt                            34              0            101
-app/src/main/java/com/example/compoundinggrowth/ui/OneTransactionFragment.kt                      25              8            100
-app/src/main/res/layout/create_transaction.xml                                                    21              0             98
-app/src/main/java/com/example/compoundinggrowth/AuthUser.kt                                       16             13             96
-app/src/main/java/com/example/compoundinggrowth/ui/TransactionsFragment.kt                        23              4             80
-app/src/main/java/com/example/compoundinggrowth/ui/OneBudgetFragment.kt                           17              2             69
-app/src/main/res/layout/one_budget.xml                                                            16              0             69
-app/src/main/res/navigation/mobile_navigation.xml                                                 13              0             63
-app/src/main/java/com/example/compoundinggrowth/model/Transaction.kt                              10              3             61
-app/src/main/java/com/example/compoundinggrowth/MainActivity.kt                                   15              2             60
-app/src/main/res/layout/fragment_budgets.xml                                                      10              0             58
-app/src/main/java/com/example/compoundinggrowth/ui/BudgetsAdapter.kt                              21              3             57
-app/src/main/java/com/example/compoundinggrowth/ui/TransactionAdapter.kt                          17              3             57
-app/src/main/res/layout/one_transaction.xml                                                        8              0             57
-app/src/main/res/layout/fragment_home.xml                                                          5              0             41
-app/src/main/res/layout/fragment_accounts.xml                                                      5              0             38
-app/src/main/res/layout/fragment_transactions.xml                                                  6              0             37
-app/src/main/res/layout/budget_row.xml                                                             4              0             36
-app/src/main/res/layout/activity_main.xml                                                          3              0             29
-app/src/main/AndroidManifest.xml                                                                   3              0             24
-app/src/main/res/layout/row_transaction.xml                                                        3              0             24
-app/src/main/res/menu/bottom_nav_menu.xml                                                          5              0             19
-app/src/main/java/com/example/compoundinggrowth/model/Budget.kt                                    2              2             15
-app/src/main/java/com/example/compoundinggrowth/api/AlphaVantageRepository.kt                      4              0             14
-----------------------------------------------------------------------------------------------------------------------------------
-SUM:                                                                                             513             58           2199
-----------------------------------------------------------------------------------------------------------------------------------
-
--------------------------------------------------------------------------------
-Language                     files          blank        comment           code
--------------------------------------------------------------------------------
-Kotlin                          17            411             58           1606
-XML                             13            102              0            593
--------------------------------------------------------------------------------
-SUM:                            30            513             58           2199
--------------------------------------------------------------------------------
-```
